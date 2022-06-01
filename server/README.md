@@ -2,7 +2,13 @@
 
 Nest.js + TypeORM + SQLite 기반 프로젝트입니다.
 
-## 로컬 환경에서 실행하의
+## Demo
+
+> Railway 를 통해 자동배포 되고있습니다
+
+https://wisely-coding-test.up.railway.app/
+
+## 로컬 환경에서 실행하기
 
 ### 1. 깃 저장소 클론
 
