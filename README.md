@@ -34,12 +34,12 @@ Github 이슈는 todo list 로 대체합니다.
     - [x] Railway 배포 연동
     - [x] Database 연결
         - [x] TypeORM + SQLite 설정
-    - [ ] todo 도메인 작성
+    - [x] todo 도메인 작성
         - [x] create new todo
         - [x] get many todos
         - [x] get one todo
         - [x] update todo
-        - [ ] delete todo
+        - [x] delete todo
     - [ ] relatedTodo 도메인 작성
         - [ ] create todo 에 관계된 todo 같이 작성되도록 수정
         - [ ] get many todos 에 relatedTodo join 해서 보여주기

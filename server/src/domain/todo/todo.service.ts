@@ -47,4 +47,8 @@ export class TodoService {
 
     return this.todoRepository.save({ ...todo, ...dto, completedAt })
   }
+
+  async deleteOneTodoById(id: number): Promise<void> {
+    await this.todoRepository.softDelete({ id })
+  }
 }

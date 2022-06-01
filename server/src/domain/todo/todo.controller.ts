@@ -1,5 +1,5 @@
 import { UpdateTodoDto } from '@domain/todo/dto/update-todo.dto'
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 
 import { CreateTodoDto } from './dto/create-todo.dto'
 import { PaginationDto } from './dto/pagination.dto'
@@ -27,5 +27,10 @@ export class TodoController {
   @Patch('/:id')
   async updateOneTodo(@Param('id') id: number, @Body() dto: UpdateTodoDto) {
     return this.todoService.updateOneTodo(id, dto)
+  }
+
+  @Delete('/:id')
+  async deleteOneTodoById(@Param('id') id: number) {
+    return this.todoService.deleteOneTodoById(id)
   }
 }
