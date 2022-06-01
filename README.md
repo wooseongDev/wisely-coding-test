@@ -41,7 +41,7 @@ Github 이슈는 todo list 로 대체합니다.
         - [x] update todo
         - [x] delete todo
     - [ ] relatedTodo 도메인 작성
-        - [ ] create todo 에 관계된 todo 같이 작성되도록 수정
+        - [x] create todo 에 관계된 todo 같이 작성되도록 수정
         - [ ] get many todos 에 relatedTodo join 해서 보여주기
         - [ ] get one todo 에 related todo join 해서 보여주기
         - [ ] update todo 에 관계된 todo 추가, 삭제 가능하도록 수정

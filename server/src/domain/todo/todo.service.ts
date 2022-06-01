@@ -1,22 +1,31 @@
-import { UpdateTodoDto } from '@domain/todo/dto/update-todo.dto'
+import { RelatedTodoService } from '@domain/related-todo/related-todo.service'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { CreateTodoDto } from './dto/create-todo.dto'
 import { PaginationDto } from './dto/pagination.dto'
+import { UpdateTodoDto } from './dto/update-todo.dto'
 import { Todos } from './todo.entity'
 
 @Injectable()
 export class TodoService {
   constructor(
     @InjectRepository(Todos)
-    private readonly todoRepository: Repository<Todos>
+    private readonly todoRepository: Repository<Todos>,
+    private readonly relatedTodoService: RelatedTodoService
   ) {}
 
   async createTodo(dto: CreateTodoDto): Promise<void> {
-    const { text } = dto
-    await this.todoRepository.save({ text, isCompleted: false })
+    const { text, parentIds } = dto
+    const todo = await this.todoRepository.save({ text, isCompleted: false })
+
+    if (parentIds) {
+      await this.relatedTodoService.createManyRelatedTodos({
+        parentIds,
+        childId: todo.id,
+      })
+    }
   }
 
   async getManyTodos(dto: PaginationDto): Promise<{ total: number; data: Todos[] }> {
