@@ -32,9 +32,9 @@ export class Todos {
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
   deletedAt!: Date | null
 
-  @OneToMany(() => RelatedTodos, (relatedTodos) => relatedTodos.parentTodo)
+  @OneToMany(() => RelatedTodos, (relatedTodos) => relatedTodos.childTodo)
   parentTodos!: RelatedTodos[]
 
-  @OneToMany(() => RelatedTodos, (relatedTodos) => relatedTodos.childTodo)
-  childTodos!: RelatedTodos[]
+  @OneToMany(() => RelatedTodos, (relatedTodos) => relatedTodos.parentTodo)
+  childrenTodos!: RelatedTodos[]
 }

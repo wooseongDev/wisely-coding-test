@@ -30,11 +30,11 @@ export class RelatedTodos {
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
   deletedAt!: Date | null
 
-  @ManyToOne(() => Todos, (todos) => todos.childTodos)
+  @ManyToOne(() => Todos, (todos) => todos.parentTodos)
   @JoinColumn({ name: 'parent_id' })
   parentTodo!: Todos
 
-  @ManyToOne(() => Todos, (todos) => todos.childTodos)
+  @ManyToOne(() => Todos, (todos) => todos.childrenTodos)
   @JoinColumn({ name: 'child_id' })
   childTodo!: Todos
 }

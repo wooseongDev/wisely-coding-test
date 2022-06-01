@@ -35,6 +35,7 @@ export class TodoService {
       skip: (page - 1) * size,
       take: size,
       order: { createdAt: 'DESC' },
+      relations: { parentTodos: true },
     })
 
     return {
