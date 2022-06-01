@@ -35,7 +35,7 @@ Github 이슈는 todo list 로 대체합니다.
     - [x] Database 연결
         - [x] TypeORM + SQLite 설정
     - [ ] todo 도메인 작성
-        - [ ] create new todo
+        - [x] create new todo
         - [ ] get many todos
         - [ ] get one todo
         - [ ] update todo
