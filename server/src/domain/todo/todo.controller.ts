@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
 
 import { CreateTodoDto } from './dto/create-todo.dto'
 import { PaginationDto } from './dto/pagination.dto'
@@ -16,5 +16,10 @@ export class TodoController {
   @Get('/')
   async getAllTodos(@Query() query: PaginationDto) {
     return this.todoService.getManyTodos(query)
+  }
+
+  @Get('/:id')
+  async getOneTodoById(@Param('id') id: number) {
+    return this.todoService.getOneTodoById(id)
   }
 }

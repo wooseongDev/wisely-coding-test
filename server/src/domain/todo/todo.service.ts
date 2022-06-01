@@ -32,4 +32,8 @@ export class TodoService {
       data: todos,
     }
   }
+
+  async getOneTodoById(id: number): Promise<Todos> {
+    return this.todoRepository.findOneBy({ id })
+  }
 }
