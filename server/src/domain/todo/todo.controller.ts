@@ -5,7 +5,7 @@ import { CreateTodoDto } from './dto/create-todo.dto'
 import { PaginationDto } from './dto/pagination.dto'
 import { TodoService } from './todo.service'
 
-@Controller('todo')
+@Controller('todos')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
