@@ -1,0 +1,39 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint/eslint-plugin", "simple-import-sort", "prettier"],
+  "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended", "prettier"],
+  "root": true,
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "ignorePatterns": [".eslintrc.js"],
+  "rules": {
+    // Prettier
+    "prettier/prettier": ["error"],
+    // TypeScript
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    // JavaScript
+    "class-methods-use-this": "off",
+    "no-useless-constructor": "off",
+    "no-console": [
+      "warn",
+      {
+        "allow": ["info", "error", "warn"]
+      }
+    ],
+    // Import
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off",
+    // simple-import-sort
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    // baseUrl 은 nest tsconfig 에 적용돼있음
+    // "baseUrl": "./",
+    "paths": {
+      "@app/*": ["src/app/*"]
+    }
+  }
+}
