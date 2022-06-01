@@ -45,7 +45,10 @@ export class TodoService {
   }
 
   async getOneTodoById(id: number): Promise<Todos> {
-    return this.todoRepository.findOneBy({ id })
+    return this.todoRepository.findOne({
+      where: { id },
+      relations: { parentTodos: true },
+    })
   }
 
   async updateOneTodo(id: number, dto: UpdateTodoDto): Promise<Todos> {
