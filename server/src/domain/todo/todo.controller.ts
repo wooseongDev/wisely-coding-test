@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
+import { UpdateTodoDto } from '@domain/todo/dto/update-todo.dto'
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common'
 
 import { CreateTodoDto } from './dto/create-todo.dto'
 import { PaginationDto } from './dto/pagination.dto'
@@ -21,5 +22,10 @@ export class TodoController {
   @Get('/:id')
   async getOneTodoById(@Param('id') id: number) {
     return this.todoService.getOneTodoById(id)
+  }
+
+  @Patch('/:id')
+  async updateOneTodo(@Param('id') id: number, @Body() dto: UpdateTodoDto) {
+    return this.todoService.updateOneTodo(id, dto)
   }
 }

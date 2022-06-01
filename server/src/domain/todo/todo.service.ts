@@ -1,3 +1,4 @@
+import { UpdateTodoDto } from '@domain/todo/dto/update-todo.dto'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -35,5 +36,15 @@ export class TodoService {
 
   async getOneTodoById(id: number): Promise<Todos> {
     return this.todoRepository.findOneBy({ id })
+  }
+
+  async updateOneTodo(id: number, dto: UpdateTodoDto): Promise<Todos> {
+    const todo = await this.todoRepository.findOneBy({ id })
+
+    let { completedAt } = todo
+    if (!dto.isCompleted) completedAt = null
+    if (!todo.isCompleted && dto.isCompleted) completedAt = new Date()
+
+    return this.todoRepository.save({ ...todo, ...dto, completedAt })
   }
 }
