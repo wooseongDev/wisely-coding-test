@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsNumber } from 'class-validator'
 
-export class CreateManyRelatedTodosDto {
-  @IsNumber(undefined, { each: true })
+export class BaseRelatedTodoDto {
+  @IsNumber()
   @IsNotEmpty()
-  parentIds!: number[]
+  parentId!: number
 
   @IsNumber()
   @IsNotEmpty()

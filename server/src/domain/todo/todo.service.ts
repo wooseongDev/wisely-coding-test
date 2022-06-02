@@ -51,14 +51,34 @@ export class TodoService {
     })
   }
 
-  async updateOneTodo(id: number, dto: UpdateTodoDto): Promise<Todos> {
-    const todo = await this.todoRepository.findOneBy({ id })
+  async updateOneTodo(id: number, dto: UpdateTodoDto): Promise<void> {
+    const { text, isCompleted, parentIds: willUpdateIds = [] } = dto
+    const todo = await this.getOneTodoById(id)
+    if (!todo) return
+
+    const parentIds = todo.parentTodos.map((parentTodo) => parentTodo.parentId)
+
+    const willCreateRelatedTodoIds = willUpdateIds.filter((relatedId) => !parentIds.includes(relatedId))
+    const willDeleteRelatedTodoIds = parentIds.filter((parentId) => !willUpdateIds.includes(parentId))
 
     let { completedAt } = todo
     if (!dto.isCompleted) completedAt = null
     if (!todo.isCompleted && dto.isCompleted) completedAt = new Date()
 
-    return this.todoRepository.save({ ...todo, ...dto, completedAt })
+    await this.todoRepository.save({ ...todo, text, isCompleted, completedAt })
+
+    if (willCreateRelatedTodoIds.length) {
+      await this.relatedTodoService.createManyRelatedTodos({
+        parentIds: willCreateRelatedTodoIds,
+        childId: id,
+      })
+    }
+    if (willDeleteRelatedTodoIds.length) {
+      await this.relatedTodoService.deleteManyRelatedTodos({
+        parentIds: willDeleteRelatedTodoIds,
+        childId: todo.id,
+      })
+    }
   }
 
   async deleteOneTodoById(id: number): Promise<void> {

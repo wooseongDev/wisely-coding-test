@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, IsString } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class UpdateTodoDto {
   @IsString()
@@ -8,4 +8,8 @@ export class UpdateTodoDto {
   @IsBoolean()
   @IsOptional()
   isCompleted?: boolean
+
+  @IsNumber(undefined, { each: true })
+  @IsOptional()
+  parentIds?: number[]
 }

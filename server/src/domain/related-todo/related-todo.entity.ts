@@ -10,6 +10,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
+// ! 관계가 순환하는 todos entity 는 어떻게 해야할까?
+// ! 조상 path 를 저장하는 column 을 만들어도 조상의 부모가 추가되면 참조하는 모든 path 가 업데이트 되어야 하는데..
+// ! db 쪽에서 해결하는 방법을 모르기에 일단 넘어감.
+
 @Entity('related_todos')
 export class RelatedTodos {
   @PrimaryGeneratedColumn('increment', { name: 'id' })
