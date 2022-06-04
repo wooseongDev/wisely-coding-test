@@ -49,6 +49,6 @@ Github 이슈는 todo list 로 대체합니다.
     - [x] 검색 도메인 작성
     - [x] todo update 시 parent todo 의 isCompleted 가 true 인 경우 업데이트 하도록 수정
 - [ ] Client
-    - [ ] React.js 보일러 플레이트 세팅
+    - [x] React.js 보일러 플레이트 세팅
     - [ ] Vercel 자동 배포 연동
     - [ ] TBD
