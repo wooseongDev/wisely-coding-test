@@ -46,7 +46,8 @@ Github 이슈는 todo list 로 대체합니다.
         - [x] get one todo 에 related todo join 해서 보여주기
         - [x] update todo 에 관계된 todo 추가, 삭제 가능하도록 수정
         - [x] delete todo 에 관계된 todo 여부 체크, 관계 삭제 후 삭제하도록 수정
-    - [ ] 검색 도메인 작성
+    - [x] 검색 도메인 작성
+    - [ ] todo update 시 parent todo 의 isCompleted 가 true 인 경우 업데이트 하도록 수정
 - [ ] Client
     - [ ] React.js 보일러 플레이트 세팅
     - [ ] Vercel 자동 배포 연동

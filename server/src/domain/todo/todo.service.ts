@@ -1,10 +1,11 @@
 import { RelatedTodoService } from '@domain/related-todo/related-todo.service'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import dayjs from 'dayjs'
+import { Between, ILike, Repository } from 'typeorm'
 
 import { CreateTodoDto } from './dto/create-todo.dto'
-import { PaginationDto } from './dto/pagination.dto'
+import { SearchTodoDto } from './dto/search-todo.dto'
 import { UpdateTodoDto } from './dto/update-todo.dto'
 import { Todos } from './todo.entity'
 
@@ -28,12 +29,25 @@ export class TodoService {
     }
   }
 
-  async getManyTodos(dto: PaginationDto): Promise<{ total: number; data: Todos[] }> {
-    const { page = 1, size = 20 } = dto
+  async getManyTodos(dto: SearchTodoDto): Promise<{ total: number; data: Todos[] }> {
+    const { page = 1, size = 20, text, isCompleted, completedAt, createdAt, updatedAt } = dto
+
+    const betweenDate = (date: string) => {
+      const start = dayjs(date).startOf('d').toDate()
+      const end = dayjs(date).endOf('d').toDate()
+      return Between(start, end)
+    }
 
     const [todos, total] = await this.todoRepository.findAndCount({
       skip: (page - 1) * size,
       take: size,
+      where: {
+        text: text && ILike(`%${text}%`),
+        isCompleted: isCompleted === undefined ? undefined : !!isCompleted,
+        completedAt: completedAt && betweenDate(completedAt),
+        createdAt: createdAt && betweenDate(createdAt),
+        updatedAt: updatedAt && betweenDate(updatedAt),
+      },
       order: { createdAt: 'DESC' },
       relations: { parentTodos: true },
     })
@@ -63,7 +77,7 @@ export class TodoService {
 
     let { completedAt } = todo
     if (!dto.isCompleted) completedAt = null
-    if (!todo.isCompleted && dto.isCompleted) completedAt = new Date()
+    if (!todo.isCompleted && dto.isCompleted) completedAt = dayjs().toDate()
 
     await this.todoRepository.save({ ...todo, text, isCompleted, completedAt })
 
