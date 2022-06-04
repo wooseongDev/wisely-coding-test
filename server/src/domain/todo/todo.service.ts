@@ -1,22 +1,31 @@
-import { UpdateTodoDto } from '@domain/todo/dto/update-todo.dto'
+import { RelatedTodoService } from '@domain/related-todo/related-todo.service'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { CreateTodoDto } from './dto/create-todo.dto'
 import { PaginationDto } from './dto/pagination.dto'
+import { UpdateTodoDto } from './dto/update-todo.dto'
 import { Todos } from './todo.entity'
 
 @Injectable()
 export class TodoService {
   constructor(
     @InjectRepository(Todos)
-    private readonly todoRepository: Repository<Todos>
+    private readonly todoRepository: Repository<Todos>,
+    private readonly relatedTodoService: RelatedTodoService
   ) {}
 
   async createTodo(dto: CreateTodoDto): Promise<void> {
-    const { text } = dto
-    await this.todoRepository.save({ text, isCompleted: false })
+    const { text, parentIds } = dto
+    const todo = await this.todoRepository.save({ text, isCompleted: false })
+
+    if (parentIds) {
+      await this.relatedTodoService.createManyRelatedTodos({
+        parentIds,
+        childId: todo.id,
+      })
+    }
   }
 
   async getManyTodos(dto: PaginationDto): Promise<{ total: number; data: Todos[] }> {
@@ -26,6 +35,7 @@ export class TodoService {
       skip: (page - 1) * size,
       take: size,
       order: { createdAt: 'DESC' },
+      relations: { parentTodos: true },
     })
 
     return {
@@ -35,20 +45,50 @@ export class TodoService {
   }
 
   async getOneTodoById(id: number): Promise<Todos> {
-    return this.todoRepository.findOneBy({ id })
+    return this.todoRepository.findOne({
+      where: { id },
+      relations: { parentTodos: true },
+    })
   }
 
-  async updateOneTodo(id: number, dto: UpdateTodoDto): Promise<Todos> {
-    const todo = await this.todoRepository.findOneBy({ id })
+  async updateOneTodo(id: number, dto: UpdateTodoDto): Promise<void> {
+    const { text, isCompleted, parentIds: willUpdateIds = [] } = dto
+    const todo = await this.getOneTodoById(id)
+    if (!todo) return
+
+    const parentIds = todo.parentTodos.map((parentTodo) => parentTodo.parentId)
+
+    const willCreateRelatedTodoIds = willUpdateIds.filter((relatedId) => !parentIds.includes(relatedId))
+    const willDeleteRelatedTodoIds = parentIds.filter((parentId) => !willUpdateIds.includes(parentId))
 
     let { completedAt } = todo
     if (!dto.isCompleted) completedAt = null
     if (!todo.isCompleted && dto.isCompleted) completedAt = new Date()
 
-    return this.todoRepository.save({ ...todo, ...dto, completedAt })
+    await this.todoRepository.save({ ...todo, text, isCompleted, completedAt })
+
+    if (willCreateRelatedTodoIds.length) {
+      await this.relatedTodoService.createManyRelatedTodos({
+        parentIds: willCreateRelatedTodoIds,
+        childId: id,
+      })
+    }
+    if (willDeleteRelatedTodoIds.length) {
+      await this.relatedTodoService.deleteManyRelatedTodos({
+        parentIds: willDeleteRelatedTodoIds,
+        childId: todo.id,
+      })
+    }
   }
 
   async deleteOneTodoById(id: number): Promise<void> {
-    await this.todoRepository.softDelete({ id })
+    const todo = await this.todoRepository.findOne({
+      where: { id },
+      relations: { parentTodos: true, childrenTodos: true },
+    })
+
+    if (!todo) return
+    await this.relatedTodoService.deleteManyRelatedTodosByTodoId(todo.id)
+    await this.todoRepository.softDelete(todo.id)
   }
 }

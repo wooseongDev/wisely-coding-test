@@ -40,12 +40,12 @@ Github 이슈는 todo list 로 대체합니다.
         - [x] get one todo
         - [x] update todo
         - [x] delete todo
-    - [ ] relatedTodo 도메인 작성
-        - [ ] create todo 에 관계된 todo 같이 작성되도록 수정
-        - [ ] get many todos 에 relatedTodo join 해서 보여주기
-        - [ ] get one todo 에 related todo join 해서 보여주기
-        - [ ] update todo 에 관계된 todo 추가, 삭제 가능하도록 수정
-        - [ ] delete todo 에 관계된 todo 여부 체크, 관계 삭제 후 삭제하도록 수정
+    - [x] relatedTodo 도메인 작성
+        - [x] create todo 에 관계된 todo 같이 작성되도록 수정
+        - [x] get many todos 에 relatedTodo join 해서 보여주기
+        - [x] get one todo 에 related todo join 해서 보여주기
+        - [x] update todo 에 관계된 todo 추가, 삭제 가능하도록 수정
+        - [x] delete todo 에 관계된 todo 여부 체크, 관계 삭제 후 삭제하도록 수정
     - [ ] 검색 도메인 작성
 - [ ] Client
     - [ ] React.js 보일러 플레이트 세팅
