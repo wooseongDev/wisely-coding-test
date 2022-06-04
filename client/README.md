@@ -2,6 +2,12 @@
 
 React.js + Typescript + Vite 기반 프로젝트입니다.
 
+## Demo
+
+> Vercel 을 통해 자동배포 되고있습니다
+
+https://wisely-coding-test.vercel.app/
+
 ## 로컬 환경에서 실행하기
 
 ### 1. 깃 저장소 클론
