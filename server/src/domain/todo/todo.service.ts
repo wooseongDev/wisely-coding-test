@@ -1,5 +1,5 @@
 import { RelatedTodoService } from '@domain/related-todo/related-todo.service'
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import dayjs from 'dayjs'
 import { Between, ILike, Repository } from 'typeorm'
@@ -59,40 +59,62 @@ export class TodoService {
   }
 
   async getOneTodoById(id: number): Promise<Todos> {
-    return this.todoRepository.findOne({
+    const todo = await this.todoRepository.findOne({
       where: { id },
       relations: { parentTodos: true },
     })
+
+    if (!todo) throw new NotFoundException('todo 가 없습니다')
+    return todo
+  }
+
+  async updateOneTodoRelation(todo: Todos, parentIds?: number[]): Promise<void> {
+    if (parentIds === undefined) return
+
+    const relatedParentIds = todo.parentTodos.map(({ parentId }) => parentId)
+
+    const willCreateParentIds = parentIds.filter((id) => !relatedParentIds.includes(id))
+    const willDeleteParentIds = relatedParentIds.filter((id) => !parentIds.includes(id))
+
+    if (willCreateParentIds.length) {
+      await this.relatedTodoService.createManyRelatedTodos({
+        parentIds: willCreateParentIds,
+        childId: todo.id,
+      })
+    }
+
+    if (willDeleteParentIds.length) {
+      await this.relatedTodoService.deleteManyRelatedTodos({
+        parentIds: willDeleteParentIds,
+        childId: todo.id,
+      })
+    }
   }
 
   async updateOneTodo(id: number, dto: UpdateTodoDto): Promise<void> {
-    const { text, isCompleted, parentIds: willUpdateIds = [] } = dto
+    const { text, isCompleted, parentIds } = dto
     const todo = await this.getOneTodoById(id)
     if (!todo) return
 
-    const parentIds = todo.parentTodos.map((parentTodo) => parentTodo.parentId)
-
-    const willCreateRelatedTodoIds = willUpdateIds.filter((relatedId) => !parentIds.includes(relatedId))
-    const willDeleteRelatedTodoIds = parentIds.filter((parentId) => !willUpdateIds.includes(parentId))
+    await this.updateOneTodoRelation(todo, parentIds)
 
     let { completedAt } = todo
     if (!dto.isCompleted) completedAt = null
     if (!todo.isCompleted && dto.isCompleted) completedAt = dayjs().toDate()
 
-    await this.todoRepository.save({ ...todo, text, isCompleted, completedAt })
+    let isAbleUpdateCompleted = true
+    const parentTodoIds = todo.parentTodos.map(({ parentId }) => parentId)
 
-    if (willCreateRelatedTodoIds.length) {
-      await this.relatedTodoService.createManyRelatedTodos({
-        parentIds: willCreateRelatedTodoIds,
-        childId: id,
-      })
+    if (parentTodoIds.length) {
+      const parentTodos = await this.todoRepository.findBy(parentTodoIds.map((parentId) => ({ id: parentId })))
+      isAbleUpdateCompleted = parentTodos.every((parentTodo) => parentTodo.isCompleted)
     }
-    if (willDeleteRelatedTodoIds.length) {
-      await this.relatedTodoService.deleteManyRelatedTodos({
-        parentIds: willDeleteRelatedTodoIds,
-        childId: todo.id,
-      })
+
+    if (isCompleted && !isAbleUpdateCompleted) {
+      throw new BadRequestException('완료되지 않은 상위 todo 가 존재합니다')
     }
+
+    await this.todoRepository.save({ ...todo, text, isCompleted, completedAt })
   }
 
   async deleteOneTodoById(id: number): Promise<void> {
@@ -101,7 +123,7 @@ export class TodoService {
       relations: { parentTodos: true, childrenTodos: true },
     })
 
-    if (!todo) return
+    if (!todo) throw new NotFoundException('todo 가 없습니다')
     await this.relatedTodoService.deleteManyRelatedTodosByTodoId(todo.id)
     await this.todoRepository.softDelete(todo.id)
   }
