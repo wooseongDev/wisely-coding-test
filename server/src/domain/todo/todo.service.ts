@@ -82,6 +82,13 @@ export class TodoService {
   }
 
   async deleteOneTodoById(id: number): Promise<void> {
-    await this.todoRepository.softDelete({ id })
+    const todo = await this.todoRepository.findOne({
+      where: { id },
+      relations: { parentTodos: true, childrenTodos: true },
+    })
+
+    if (!todo) return
+    await this.relatedTodoService.deleteManyRelatedTodosByTodoId(todo.id)
+    await this.todoRepository.softDelete(todo.id)
   }
 }

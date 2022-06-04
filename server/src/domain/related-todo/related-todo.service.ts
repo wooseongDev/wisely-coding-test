@@ -36,4 +36,12 @@ export class RelatedTodoService {
       await this.relatedTodosRepository.softDelete(relatedTodos.map((x) => x.id))
     }
   }
+
+  async deleteManyRelatedTodosByTodoId(todoId: number): Promise<void> {
+    const relatedTodos = await this.relatedTodosRepository.findBy([{ parentId: todoId }, { childId: todoId }])
+
+    if (relatedTodos.length) {
+      await this.relatedTodosRepository.softDelete(relatedTodos.map((x) => x.id))
+    }
+  }
 }
