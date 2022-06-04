@@ -1,0 +1,47 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "simple-import-sort", "prettier"],
+  "extends": ["airbnb", "airbnb/hooks", "plugin:@typescript-eslint/recommended", "prettier"],
+  "rules": {
+    // Prettier
+    "prettier/prettier": ["error"],
+    // TypeScript
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "error",
+    // JavaScript
+    "no-console": [
+      "warn",
+      {
+        "allow": ["error", "warn"]
+      }
+    ],
+    // React
+    "react/react-in-jsx-scope": "off",
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".tsx"]
+      }
+    ],
+    // import
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["/**/*.ts?(x)"]
+      }
+    ],
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off",
+    "import/extensions": "off",
+    // simple-import-sort
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
+  }
+}
