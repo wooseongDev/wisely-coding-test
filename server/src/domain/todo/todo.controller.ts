@@ -1,8 +1,8 @@
-import { UpdateTodoDto } from '@domain/todo/dto/update-todo.dto'
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 
 import { CreateTodoDto } from './dto/create-todo.dto'
-import { PaginationDto } from './dto/pagination.dto'
+import { SearchTodoDto } from './dto/search-todo.dto'
+import { UpdateTodoDto } from './dto/update-todo.dto'
 import { TodoService } from './todo.service'
 
 @Controller('todos')
@@ -15,7 +15,7 @@ export class TodoController {
   }
 
   @Get('/')
-  async getAllTodos(@Query() query: PaginationDto) {
+  async getAllTodos(@Query() query: SearchTodoDto) {
     return this.todoService.getManyTodos(query)
   }
 
