@@ -10,11 +10,15 @@
     "prettier": "prettier --write './src/**/*.{ts,tsx}'"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
     "axios": "^0.27.2",
+    "dayjs": "^1.11.2",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-query": "^3.39.1"
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.9.2",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.27.0",

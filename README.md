@@ -53,9 +53,9 @@ Github 이슈는 todo list 로 대체합니다.
     - [x] Vercel 자동 배포 연동
     - [ ] todo CRUD 작성
         - [x] todo api 작성
-        - [ ] todo list 작성
-            - [ ] react-query 사용
-            - [ ] list 페이지네이션 구현
+        - [x] todo list 작성
+            - [x] react-query 사용
+            - [x] list 페이지네이션 구현
         - [ ] todo create form 작성
         - [ ] todo 검색 기능 구현
         - [ ] todo 수정 모달 작성

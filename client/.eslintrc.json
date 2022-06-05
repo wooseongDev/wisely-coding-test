@@ -15,6 +15,7 @@
         "allow": ["error", "warn"]
       }
     ],
+    "consistent-return": "off",
     "no-use-before-define": "off",
     "no-shadow": "off",
     // React
