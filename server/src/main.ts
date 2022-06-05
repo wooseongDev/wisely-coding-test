@@ -15,6 +15,10 @@ async function bootstrap() {
     })
   )
 
+  app.enableCors({
+    origin: ['http://localhost:3000', 'https://wisely-coding-test.vercel.app'],
+  })
+
   app.setGlobalPrefix('api', {
     exclude: [{ path: '/', method: RequestMethod.GET }],
   })
