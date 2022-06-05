@@ -17,7 +17,7 @@ export const getManyTodos = async (
     size?: number
   } = {}
 ) => {
-  const { text, isCompleted, completedAt, createdAt, updatedAt } = args
+  const { text, isCompleted, completedAt, createdAt, updatedAt, page, size } = args
 
   return axiosInstance<GetManyTodosResponse>({
     method: 'GET',
@@ -28,6 +28,8 @@ export const getManyTodos = async (
       completedAt,
       createdAt,
       updatedAt,
+      page,
+      size,
     },
   })
 }
