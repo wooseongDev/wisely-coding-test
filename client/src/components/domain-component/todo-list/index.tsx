@@ -2,6 +2,7 @@ import { TodoCard } from '@components/domain-component/todo-card'
 import { css } from '@emotion/react'
 import { useGetManyTodosInfiniteQuery } from '@hooks/use-get-many-todos-infinite-query'
 import { useIntersection } from '@hooks/use-intersection'
+import { Center, Loader, Stack } from '@mantine/core'
 import React from 'react'
 
 export const TodoList: React.FC = () => {
@@ -15,33 +16,20 @@ export const TodoList: React.FC = () => {
   if (isError) return <div>Error</div>
   if (!todos || isLoading) return <div>Loading</div>
   return (
-    <div css={rootStyle}>
+    <Stack css={rootStyle} spacing="md">
       {todos.map((todo) => (
         <TodoCard key={todo.id} todo={todo} />
       ))}
 
       {hasNextPage && (
-        <div ref={ref} css={loadMoreStyle}>
-          loading...
-        </div>
+        <Center ref={ref}>
+          <Loader size="sm" />
+        </Center>
       )}
-    </div>
+    </Stack>
   )
 }
 
 const rootStyle = css`
-  display: flex;
-  flex-direction: column;
   padding: 20px 20px 120px;
-
-  & > *:not(:last-of-type) {
-    margin-bottom: 16px;
-  }
-`
-
-const loadMoreStyle = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #a5a5a5;
 `

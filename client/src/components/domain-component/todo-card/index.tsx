@@ -1,9 +1,10 @@
 import { DateText } from '@components/base-component/date-text'
-import { css } from '@emotion/react'
 import { useDeleteTodoMutation } from '@hooks/use-delete-todo-mutation'
 import { useUpdateTodoMutation } from '@hooks/use-update-todo-mutation'
+import { ActionIcon, Card, Checkbox, Group, Stack, Text, Title } from '@mantine/core'
 import { GetOneTodoResponse } from '@tools/api/todo/get-one-todo'
 import React from 'react'
+import { Pencil, Trash } from 'tabler-icons-react'
 
 export type TodoCardProps = {
   todo: GetOneTodoResponse
@@ -16,86 +17,40 @@ export const TodoCard: React.FC<TodoCardProps> = (props) => {
   const { onDelete } = useDeleteTodoMutation({ id })
   const { updateIsCompleted } = useUpdateTodoMutation({ id })
 
+  const onToggle = () => {
+    updateIsCompleted(!isCompleted)
+  }
+
   return (
-    <div css={rootStyle}>
-      <div css={todoTopStyle}>
-        <div css={checkboxWrapStyle}>
-          <input
-            css={checkboxStyle}
-            type="checkbox"
-            checked={isCompleted}
-            onChange={() => updateIsCompleted(!isCompleted)}
-          />
-          <p css={checkboxTextStyle}>{`#${id}`}</p>
+    <Card shadow="sm" p="lg" radius="md">
+      <Stack spacing="xs">
+        <Group position="apart">
+          <Checkbox label={`#${id}`} checked={isCompleted} onChange={onToggle} />
+
+          <Group spacing="xs">
+            <ActionIcon size="xs">
+              <Pencil />
+            </ActionIcon>
+
+            <ActionIcon size="xs" color="red" onClick={onDelete}>
+              <Trash />
+            </ActionIcon>
+          </Group>
+        </Group>
+
+        <Title order={5}>{text}</Title>
+
+        {parentTodos.length > 0 && (
+          <Text size="xs" color="blue">
+            {parentTodos.map(({ parentId }) => `#${parentId}`).join(' ')}
+          </Text>
+        )}
+
+        <div>
+          <DateText date={createdAt} format="작성일 | YYYY-MM-DD" />
+          <DateText date={updatedAt} format="최종수정일 | YYYY-MM-DD" />
         </div>
-
-        <button type="button" onClick={onDelete}>
-          X
-        </button>
-      </div>
-
-      <div>
-        <h2 css={textStyle}>{text}</h2>
-      </div>
-
-      {parentTodos.length > 0 && (
-        <div css={parentIdsTextStyle}>
-          <p>{parentTodos.map(({ parentId }) => `#${parentId}`).join(' ')}</p>
-        </div>
-      )}
-
-      <div>
-        <DateText date={createdAt} format="작성일 | YYYY-MM-DD" />
-        <DateText date={updatedAt} format="최종수정일 | YYYY-MM-DD" />
-      </div>
-    </div>
+      </Stack>
+    </Card>
   )
 }
-
-const rootStyle = css`
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-
-  & > *:not(:last-of-type) {
-    margin-bottom: 8px;
-  }
-`
-
-const todoTopStyle = css`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`
-
-const checkboxWrapStyle = css`
-  display: flex;
-  align-items: center;
-`
-
-const checkboxStyle = css`
-  margin-right: 4px;
-`
-
-const checkboxTextStyle = css`
-  font-size: 14px;
-  font-weight: bold;
-  color: #1a1919;
-`
-
-const textStyle = css`
-  flex: 1;
-  font-size: 16px;
-  font-weight: 500;
-  color: #1a1919;
-`
-
-const parentIdsTextStyle = css`
-  font-size: 12px;
-  color: #228be6;
-`

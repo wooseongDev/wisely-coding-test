@@ -1,4 +1,5 @@
 import { useGetManyTodosInfiniteQuery } from '@hooks/use-get-many-todos-infinite-query'
+import { showNotification } from '@mantine/notifications'
 import { api } from '@tools/api'
 import { useMutation } from 'react-query'
 
@@ -13,7 +14,7 @@ export const useCreateTodoMutation = () => {
     {
       onSuccess: async () => {
         await refetch()
-        window.scroll({ top: 0 })
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       },
     }
   )
@@ -21,7 +22,15 @@ export const useCreateTodoMutation = () => {
   const createTodo = (args: { text: string; parentIds?: number[] }) => {
     const { text, parentIds } = args
 
-    if (!text.trim().length) return alert('할 일을 입력해주세요.')
+    if (!text.trim().length) {
+      showNotification({
+        id: 'no-todo-text',
+        color: 'red',
+        message: '할 일을 입력해주세요',
+        disallowClose: true,
+      })
+      return
+    }
     mutation.mutate({ text, parentIds })
   }
 
