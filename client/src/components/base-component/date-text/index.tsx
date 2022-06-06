@@ -1,5 +1,5 @@
 import { Text, useMantineTheme } from '@mantine/core'
-import dayjs from 'dayjs'
+import { dayjs } from '@tools/util/dayjs.util'
 import React from 'react'
 
 export type DateTextProps = {

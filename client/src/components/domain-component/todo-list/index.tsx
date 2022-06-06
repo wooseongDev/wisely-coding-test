@@ -1,20 +1,24 @@
 import { TodoCard } from '@components/domain-component/todo-card'
 import { css } from '@emotion/react'
-import { useGetManyTodosInfiniteQuery } from '@hooks/use-get-many-todos-infinite-query'
 import { useIntersection } from '@hooks/use-intersection'
 import { Center, Loader, Stack } from '@mantine/core'
+import { GetOneTodoResponse } from '@tools/api/todo/get-one-todo'
 import React from 'react'
 
-export const TodoList: React.FC = () => {
-  const { todos, isError, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useGetManyTodosInfiniteQuery()
+export type TodoListProps = {
+  todos: GetOneTodoResponse[]
+  loadMore: () => void
+  hasNextPage?: boolean
+}
+
+export const TodoList: React.FC<TodoListProps> = (props) => {
+  const { todos, loadMore, hasNextPage } = props
 
   const [ref] = useIntersection(async (entry) => {
-    if (!entry.isIntersecting || !hasNextPage || isFetchingNextPage) return
-    await fetchNextPage()
+    if (!entry.isIntersecting) return
+    await loadMore()
   })
 
-  if (isError) return <div>Error</div>
-  if (!todos || isLoading) return <div>Loading</div>
   return (
     <Stack css={rootStyle} spacing="md">
       {todos.map((todo) => (

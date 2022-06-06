@@ -3,7 +3,7 @@ import { useDeleteTodoMutation } from '@hooks/use-delete-todo-mutation'
 import { useUpdateTodoMutation } from '@hooks/use-update-todo-mutation'
 import { ActionIcon, Card, Checkbox, Group, Stack, Text, Title } from '@mantine/core'
 import { GetOneTodoResponse } from '@tools/api/todo/get-one-todo'
-import React from 'react'
+import React, { useState } from 'react'
 import { Pencil, Trash } from 'tabler-icons-react'
 
 export type TodoCardProps = {
@@ -14,18 +14,25 @@ export const TodoCard: React.FC<TodoCardProps> = (props) => {
   const { todo } = props
   const { id, text, isCompleted, parentTodos, createdAt, updatedAt } = todo
 
+  const [isCompletedValue, setIsCompletedValue] = useState(isCompleted)
+
   const { onDelete } = useDeleteTodoMutation({ id })
-  const { updateIsCompleted } = useUpdateTodoMutation({ id })
+  const { updateIsCompleted } = useUpdateTodoMutation({
+    id,
+    onSuccess: ({ isCompleted }) => {
+      if (isCompleted !== undefined) setIsCompletedValue(isCompleted)
+    },
+  })
 
   const onToggle = () => {
-    updateIsCompleted(!isCompleted)
+    updateIsCompleted(!isCompletedValue)
   }
 
   return (
     <Card shadow="sm" p="lg" radius="md">
       <Stack spacing="xs">
         <Group position="apart">
-          <Checkbox label={`#${id}`} checked={isCompleted} onChange={onToggle} />
+          <Checkbox label={`#${id}`} checked={isCompletedValue} onChange={onToggle} />
 
           <Group spacing="xs">
             <ActionIcon size="xs">

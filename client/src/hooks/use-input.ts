@@ -7,13 +7,13 @@ export const useInput = (initialState = '') => {
     setValue(e.target.value)
   }
 
-  const resetValue = () => {
+  const reset = () => {
     setValue(initialState)
   }
 
   return {
     value,
     onChange,
-    resetValue,
+    reset,
   }
 }

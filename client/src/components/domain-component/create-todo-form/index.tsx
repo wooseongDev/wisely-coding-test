@@ -12,14 +12,14 @@ export type CreateTodoFormProps = {
 export const CreateTodoForm: React.FC<CreateTodoFormProps> = (props) => {
   const { className } = props
 
-  const { value, onChange, resetValue } = useInput()
+  const { value, onChange, reset } = useInput()
   const { createTodo } = useCreateTodoMutation()
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
 
     createTodo({ text: value })
-    resetValue()
+    reset()
   }
 
   return (

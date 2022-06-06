@@ -1,4 +1,5 @@
 import { useGetManyTodosInfiniteQuery } from '@hooks/use-get-many-todos-infinite-query'
+import { useSearchTodoInfiniteQuery } from '@hooks/use-search-todo-infinite-query'
 import { useModals } from '@mantine/modals'
 import { api } from '@tools/api'
 import { useMutation } from 'react-query'
@@ -7,7 +8,8 @@ export const useDeleteTodoMutation = (args: { id: number }) => {
   const { id } = args
 
   const modals = useModals()
-  const { refetch } = useGetManyTodosInfiniteQuery()
+  const { refetch: refetchTodos } = useGetManyTodosInfiniteQuery()
+  const { refetch: refetchSearchTodos } = useSearchTodoInfiniteQuery()
 
   const mutation = useMutation(
     async () => {
@@ -15,7 +17,8 @@ export const useDeleteTodoMutation = (args: { id: number }) => {
     },
     {
       onSuccess: async () => {
-        await refetch()
+        await refetchTodos()
+        await refetchSearchTodos()
       },
     }
   )
