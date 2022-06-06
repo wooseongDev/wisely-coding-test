@@ -1,4 +1,4 @@
-import { TodoCard } from '@components/todo-card'
+import { TodoCard } from '@components/domain-component/todo-card'
 import { css } from '@emotion/react'
 import { useGetManyTodosInfiniteQuery } from '@hooks/use-get-many-todos-infinite-query'
 import { useIntersection } from '@hooks/use-intersection'

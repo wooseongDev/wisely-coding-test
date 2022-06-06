@@ -1,4 +1,4 @@
-import { DateText } from '@components/date-text'
+import { DateText } from '@components/base-component/date-text'
 import { css } from '@emotion/react'
 import { useDeleteTodoMutation } from '@hooks/use-delete-todo-mutation'
 import { useUpdateTodoMutation } from '@hooks/use-update-todo-mutation'
