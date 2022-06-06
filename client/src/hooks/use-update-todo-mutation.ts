@@ -1,3 +1,5 @@
+import { useGetManyTodosInfiniteQuery } from '@hooks/use-get-many-todos-infinite-query'
+import { useSearchTodoInfiniteQuery } from '@hooks/use-search-todo-infinite-query'
 import { api } from '@tools/api'
 import { AxiosError } from 'axios'
 import { useMutation } from 'react-query'
@@ -8,13 +10,17 @@ export const useUpdateTodoMutation = (args: {
 }) => {
   const { id, onSuccess } = args
 
+  const { refetch: refetchTodos } = useGetManyTodosInfiniteQuery()
+  const { refetch: refetchSearchTodos } = useSearchTodoInfiniteQuery()
+
   const mutation = useMutation(
     async (args: { text?: string; isCompleted?: boolean; parentIds?: number[] }) => {
       await api.updateOneTodo({ id, ...args })
     },
     {
-      onSuccess: (_, values) => {
-        onSuccess?.(values)
+      onSuccess: async () => {
+        await refetchTodos()
+        await refetchSearchTodos()
       },
       onError: (error) => {
         if (!(error instanceof AxiosError)) return
@@ -31,8 +37,14 @@ export const useUpdateTodoMutation = (args: {
     mutation.mutate({ isCompleted })
   }
 
+  const updateTodo = (args: { text: string; parentIds?: number[] }) => {
+    const { text, parentIds } = args
+    mutation.mutate({ text, parentIds })
+  }
+
   return {
     ...mutation,
     updateIsCompleted,
+    updateTodo,
   }
 }
