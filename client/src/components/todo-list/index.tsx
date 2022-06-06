@@ -32,7 +32,7 @@ export const TodoList: React.FC = () => {
 const rootStyle = css`
   display: flex;
   flex-direction: column;
-  padding: 20px 20px 60px;
+  padding: 20px 20px 120px;
 
   & > *:not(:last-of-type) {
     margin-bottom: 16px;
