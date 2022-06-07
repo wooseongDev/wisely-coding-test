@@ -15,7 +15,11 @@
         "allow": ["error", "warn"]
       }
     ],
+    "consistent-return": "off",
+    "no-use-before-define": "off",
+    "no-shadow": "off",
     // React
+    "react/require-default-props": "off",
     "react/react-in-jsx-scope": "off",
     "react/function-component-definition": [
       "error",

@@ -21,7 +21,7 @@
 - React.js
 - Typescript
 - React-query
-- Mantine
+- Emotion
 - Vercel
 
 ## Todo list
@@ -48,14 +48,15 @@ Github 이슈는 todo list 로 대체합니다.
         - [x] delete todo 에 관계된 todo 여부 체크, 관계 삭제 후 삭제하도록 수정
     - [x] 검색 도메인 작성
     - [x] todo update 시 parent todo 의 isCompleted 가 true 인 경우 업데이트 하도록 수정
-- [ ] Client
+- [x] Client
     - [x] React.js 보일러 플레이트 세팅
     - [x] Vercel 자동 배포 연동
-    - [ ] todo CRUD 작성
-        - [ ] todo api 작성
-            - [ ] react-query 사용
-        - [ ] todo create form 작성
-        - [ ] todo list 작성
-            - [ ] list 페이지네이션 구현
-        - [ ] todo 검색 기능 구현
-        - [ ] todo 수정 모달 작성
+    - [x] todo CRUD 작성
+        - [x] todo api 작성
+        - [x] todo list 작성
+            - [x] react-query 사용
+            - [x] list 페이지네이션 구현
+        - [x] todo create form 작성
+        - [x] todo 검색 기능 구현
+        - [x] todo 수정 모달 작성
+    - [x] todo 참조 기능 추가
