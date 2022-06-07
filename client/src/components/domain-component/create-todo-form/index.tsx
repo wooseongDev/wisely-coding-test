@@ -1,4 +1,5 @@
 import { RelatedTodosModal } from '@components/domain-component/related-todos-modal'
+import { useRelatedTodoSelectList } from '@components/domain-component/related-todos-modal/hook'
 import { css } from '@emotion/react'
 import { useCreateTodoMutation } from '@hooks/use-create-todo-mutation'
 import { useInput } from '@hooks/use-input'
@@ -19,13 +20,15 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = (props) => {
   const { value: text, onChange: onChangeText, reset: resetText } = useInput()
   const { value: parentIds, buildOnChange: onChangeParentIds, reset: resetParentIds } = useParentIdsState()
   const { createTodo } = useCreateTodoMutation()
+  const { refetch } = useRelatedTodoSelectList()
 
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
     createTodo({ text, parentIds })
     resetText()
     resetParentIds()
+    await refetch()
   }
 
   return (
