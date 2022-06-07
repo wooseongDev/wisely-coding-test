@@ -35,5 +35,5 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
 }
 
 const rootStyle = css`
-  padding: 20px 20px 120px;
+  padding: 20px 0 120px;
 `

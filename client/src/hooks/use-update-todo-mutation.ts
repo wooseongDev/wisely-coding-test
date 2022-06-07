@@ -1,14 +1,12 @@
 import { useGetManyTodosInfiniteQuery } from '@hooks/use-get-many-todos-infinite-query'
 import { useSearchTodoInfiniteQuery } from '@hooks/use-search-todo-infinite-query'
+import { showNotification } from '@mantine/notifications'
 import { api } from '@tools/api'
 import { AxiosError } from 'axios'
 import { useMutation } from 'react-query'
 
-export const useUpdateTodoMutation = (args: {
-  id: number
-  onSuccess?: (values: { text?: string; isCompleted?: boolean; parentIds?: number[] }) => void
-}) => {
-  const { id, onSuccess } = args
+export const useUpdateTodoMutation = (args: { id: number }) => {
+  const { id } = args
 
   const { refetch: refetchTodos } = useGetManyTodosInfiniteQuery()
   const { refetch: refetchSearchTodos } = useSearchTodoInfiniteQuery()
@@ -26,8 +24,12 @@ export const useUpdateTodoMutation = (args: {
         if (!(error instanceof AxiosError)) return
 
         if (error.response?.status === 400) {
-          // todo modal component 작성해야함
-          alert('선행 작업이 완료되지 않았습니다.')
+          showNotification({
+            id: 'not-completed-parent-todo',
+            color: 'red',
+            message: '선행 작업이 완료되지 않았습니다.',
+            disallowClose: true,
+          })
         }
       },
     }
