@@ -60,3 +60,5 @@ Github 이슈는 todo list 로 대체합니다.
         - [x] todo 검색 기능 구현
         - [x] todo 수정 모달 작성
     - [x] todo 참조 기능 추가
+- [ ] fix
+    - [ ] create todo query 가 onSuccess 일 때 참조 리스트 query refetch 하도록 
